@@ -1,9 +1,9 @@
-object frmSample: TfrmSample
+object frmDemo: TfrmDemo
   Left = 313
   Top = 176
-  Width = 215
-  Height = 190
-  Caption = 'frmSample'
+  Caption = 'frmDemo'
+  ClientHeight = 151
+  ClientWidth = 199
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

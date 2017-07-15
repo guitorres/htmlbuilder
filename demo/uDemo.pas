@@ -1,4 +1,4 @@
-unit uSample;
+unit uDemo;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, DB, DBClient, uHTMLBuilder, ShellAPI;
 
 type
-  TfrmSample = class(TForm)
+  TfrmDemo = class(TForm)
     btnSampleDataSet: TButton;
     cdsProducts: TClientDataSet;
     cdsProductsproduct: TStringField;
@@ -28,7 +28,7 @@ type
   end;
 
 var
-  frmSample: TfrmSample;
+  frmDemo: TfrmDemo;
 
 implementation
 
@@ -39,7 +39,7 @@ const
 
 {$R *.dfm}
 
-procedure TfrmSample.PopulateDataSet(dataSet: TDataSet);
+procedure TfrmDemo.PopulateDataSet(dataSet: TDataSet);
 var
   i: Integer;
   product, price: TField;
@@ -55,7 +55,7 @@ begin
   end;
 end;
 
-procedure TfrmSample.OpenHTMLDocument(report: THTMLReport);
+procedure TfrmDemo.OpenHTMLDocument(report: THTMLReport);
 var
   htmlFile: string;
 begin
@@ -64,7 +64,7 @@ begin
   ShellExecute(Handle, 'Open', 'iexplore.exe', PChar(htmlFile), '', SW_SHOWNORMAL);
 end;
 
-function TfrmSample.GetReportStyle:string;
+function TfrmDemo.GetReportStyle:string;
 var
   style: TStringList;
 begin
@@ -80,13 +80,13 @@ begin
   end;
 end;
 
-procedure TfrmSample.FormCreate(Sender: TObject);
+procedure TfrmDemo.FormCreate(Sender: TObject);
 begin
   cdsProducts.CreateDataSet;
   PopulateDataSet(cdsProducts);
 end;
 
-procedure TfrmSample.btnSampleDataSetClick(Sender: TObject);
+procedure TfrmDemo.btnSampleDataSetClick(Sender: TObject);
 const
   cPARAGRAPH_STYLE='style="font-weight:bold;font-size:15pt;text-align:center;"';
 var
@@ -105,7 +105,7 @@ begin
   end;
 end;
 
-procedure TfrmSample.btnMultiHeaderClick(Sender: TObject);
+procedure TfrmDemo.btnMultiHeaderClick(Sender: TObject);
 const
   cPARAGRAPH_STYLE='style="font-weight:bold;font-size:15pt;text-align:center;"';
   cHEADER_STYLE='style="font-weight:bold;background-color:silver"';
