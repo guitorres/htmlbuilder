@@ -1,0 +1,8 @@
+## [1.1] - 2017-07-18
+
+### Added
+- THTMLReport.Clear clearing all objects added in report
+
+### Changed
+- Method THTMLTable.SetDataSet support default value for empty value
+- Method THTMLTable.SetDataSet get DisplayName for header and DisplayText for cell values.

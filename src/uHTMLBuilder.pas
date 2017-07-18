@@ -1,15 +1,7 @@
 {
-
 uHTMLBuilder
-
 read LICENSE.txt in source path
-
-version 1.0
-
-This unit allows simplified construction html through Delphi.
-
-name: Guilherme Torres
-e-mail: gt.borland2@gmail.com
+version 1.1
 }
 
 
@@ -97,7 +89,11 @@ type
     function AddRow ( rowName, rowStyle: string ): THTMLRow;overload;
     function AddEmptyRow: THTMLRow;
     function Build:string;
-    procedure SetDataSet(dataSet: TDataSet; HeaderColor: string = ''; EvenColor: string = ''; OddColor: string = '');
+    procedure SetDataSet(dataSet: TDataSet;
+        HeaderColor: string = '';
+        EvenColor: string = '';
+        OddColor: string = '';
+        EmptyValue: string = '');
     constructor Create(tableStyle: string = '');
     destructor Destroy;override;
   end;
@@ -122,6 +118,7 @@ type
     function AddParagraph(paragraphName, paragraphStyle: string): THTMLParagraph;
     function Build: string;
     procedure SaveToFile(fileName: string);
+    procedure Clear;
     constructor Create;overload;
     constructor Create(reportStyle: string);overload;
     destructor Destroy;override;
@@ -155,7 +152,7 @@ var
   row: THTMLrow;
 begin
   row := THTMLrow.Create;
-  row.CellList.Add(THTMLCell.Create(' ', 'colspan="100%"'));
+  row.CellList.Add(THTMLCell.Create('ï¿½', 'colspan="100%"'));
   FRowList.Add( row );
   Result := row;
 end;
@@ -200,20 +197,21 @@ begin
 end;
 
 procedure THTMLTable.SetDataSet(dataSet: TDataSet; HeaderColor: string = '';
-    EvenColor: string = ''; OddColor: string = '');
+    EvenColor: string = ''; OddColor: string = ''; EmptyValue: string = '');
 const
   StyleHeader='';
   StyleData='';
 var
   i: Integer;
   row: THTMLRow;
+  cell: THTMLCell;
 begin
   //prototipo
   row := THTMLRow.Create;
-  row.Style := 'bgcolor="'+ HeaderColor+'"';
+  row.Style := 'bgcolor="' + HeaderColor + '"';
   for i := 0 to dataSet.FieldCount - 1 do
     if dataSet.Fields[i].Visible then
-      row.AddCell('<b>' + dataSet.Fields[i].FieldName + '</b>', StyleHeader);
+      row.AddCell('<b>' + dataSet.Fields[i].DisplayName + '</b>', StyleHeader);
   Self.RowList.Add(row);
   dataSet.DisableControls;
   try
@@ -222,13 +220,17 @@ begin
     begin
       row := THTMLRow.Create;
       if ((dataSet.RecNo mod 2) <> 0) then
-        row.Style := 'bgcolor="'+EvenColor+'"'
+        row.Style := 'bgcolor="' + EvenColor + '"'
       else
-        row.Style := 'bgcolor="'+OddColor+'"';
+        row.Style := 'bgcolor="' + OddColor + '"';
 
       for i := 0 to dataSet.FieldCount - 1 do
         if dataSet.Fields[i].Visible then
-          row.AddCell(dataSet.FieldByName(dataSet.Fields[i].FieldName).AsString, StyleData);
+        begin
+          cell := row.AddCell(dataSet.FieldByName(dataSet.Fields[i].FieldName).DisplayText, StyleData);
+          if cell.Name = EmptyStr then
+            cell.Name := EmptyValue;
+        end;
       Self.RowList.Add(row);
       dataSet.Next;
     end;
@@ -408,6 +410,11 @@ begin
   finally
     FreeAndNil(html);
   end;
+end;
+
+procedure THTMLReport.Clear;
+begin
+  FHTMLItemList.Clear;
 end;
 
 constructor THTMLReport.Create(reportStyle: string);
