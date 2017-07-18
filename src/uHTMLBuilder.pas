@@ -1,6 +1,6 @@
 {
 uHTMLBuilder
-read LICENSE.txt in source path
+read LICENSE.txt 
 version 1.1
 }
 
