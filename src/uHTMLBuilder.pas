@@ -1,7 +1,7 @@
 {
 uHTMLBuilder
 read LICENSE.txt 
-version 1.1
+version 1.2
 }
 
 
@@ -13,6 +13,9 @@ uses
   Classes, Contnrs, SysUtils, DB;
 
 type
+  THTMLBase = class
+  end;
+  
   THTMLCell = class
   private
     Fstyle: string;
@@ -29,6 +32,11 @@ type
     constructor Create(cellName, cellStyle: string);overload;
     destructor Destroy; override;
   end;
+  
+  TAfterAddRow = procedure (
+    Table: THTMLBase;
+    DataSet: TDataSet
+  ) of object;  
 
   THTMLItem = class
   private
@@ -77,7 +85,7 @@ type
     destructor Destroy;override;
   end;
 
-  THTMLTable = class
+  THTMLTable = class(THTMLBase)
   private
     FRowList: TObjectList;
     Fstyle: string;
@@ -93,7 +101,8 @@ type
         HeaderColor: string = '';
         EvenColor: string = '';
         OddColor: string = '';
-        EmptyValue: string = '');
+        EmptyValue: string = '';
+        AfterAddRow: TAfterAddRow = nil);
     constructor Create(tableStyle: string = '');
     destructor Destroy;override;
   end;
@@ -152,7 +161,7 @@ var
   row: THTMLrow;
 begin
   row := THTMLrow.Create;
-  row.CellList.Add(THTMLCell.Create('�', 'colspan="100%"'));
+  row.CellList.Add(THTMLCell.Create(' ', 'colspan="100%"'));
   FRowList.Add( row );
   Result := row;
 end;
@@ -196,8 +205,10 @@ begin
   RowList.Add(Result);
 end;
 
-procedure THTMLTable.SetDataSet(dataSet: TDataSet; HeaderColor: string = '';
-    EvenColor: string = ''; OddColor: string = ''; EmptyValue: string = '');
+procedure THTMLTable.SetDataSet(
+  dataSet: TDataSet; HeaderColor: string = '';
+  EvenColor: string = ''; OddColor: string = ''; 
+  EmptyValue: string = ''; AfterAddRow: TAfterAddRow = nil);
 const
   StyleHeader='';
   StyleData='';
@@ -227,11 +238,18 @@ begin
       for i := 0 to dataSet.FieldCount - 1 do
         if dataSet.Fields[i].Visible then
         begin
-          cell := row.AddCell(dataSet.FieldByName(dataSet.Fields[i].FieldName).DisplayText, StyleData);
+          if dataSet.FieldByName(dataSet.Fields[i].FieldName).DataType = ftMemo then
+            cell := row.AddCell(dataSet.FieldByName(dataSet.Fields[i].FieldName).AsString, StyleData)
+          else
+            cell := row.AddCell(dataSet.FieldByName(dataSet.Fields[i].FieldName).DisplayText, StyleData);
+
           if cell.Name = EmptyStr then
             cell.Name := EmptyValue;
         end;
       Self.RowList.Add(row);
+      if Assigned(AfterAddRow) then
+        AfterAddRow(Self, dataSet);
+      
       dataSet.Next;
     end;
   finally
