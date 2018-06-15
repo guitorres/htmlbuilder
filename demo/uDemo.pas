@@ -13,8 +13,6 @@ type
     cdsProductsproduct: TStringField;
     cdsProductsprice: TStringField;
     btnMultiHeader: TButton;
-    Label1: TLabel;
-    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btnSampleDataSetClick(Sender: TObject);
     procedure btnMultiHeaderClick(Sender: TObject);

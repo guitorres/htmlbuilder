@@ -2,7 +2,7 @@ object frmDemo: TfrmDemo
   Left = 313
   Top = 176
   Caption = 'frmDemo'
-  ClientHeight = 151
+  ClientHeight = 107
   ClientWidth = 199
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,20 +14,6 @@ object frmDemo: TfrmDemo
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 24
-    Top = 104
-    Width = 80
-    Height = 13
-    Caption = 'Guilherme Torres'
-  end
-  object Label2: TLabel
-    Left = 24
-    Top = 120
-    Width = 111
-    Height = 13
-    Caption = 'gt.borland2@gmail.com'
-  end
   object btnSampleDataSet: TButton
     Left = 24
     Top = 24

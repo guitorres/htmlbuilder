@@ -1,4 +1,4 @@
-{
+﻿{
 uHTMLBuilder
 read LICENSE.txt 
 version 1.2
@@ -95,7 +95,7 @@ type
     property RowList: TObjectList read FRowList write FRowList;
     function AddRow ( cellList: array of THTMLCell; rowStyle: string ): THTMLRow;overload;
     function AddRow ( rowName, rowStyle: string ): THTMLRow;overload;
-    function AddEmptyRow: THTMLRow;
+    function AddEmptyRow(rowStyle:string = '') : THTMLRow;
     function Build:string;
     procedure SetDataSet(dataSet: TDataSet;
         HeaderColor: string = '';
@@ -156,11 +156,12 @@ begin
   Result := row;
 end;
 
-function THTMLTable.AddEmptyRow: THTMLRow;
+function THTMLTable.AddEmptyRow(rowStyle:string = ''): THTMLRow;
 var
   row: THTMLrow;
 begin
   row := THTMLrow.Create;
+  row.Style := rowStyle;
   row.CellList.Add(THTMLCell.Create(' ', 'colspan="100%"'));
   FRowList.Add( row );
   Result := row;
