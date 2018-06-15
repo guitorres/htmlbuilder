@@ -1,11 +1,4 @@
-﻿{
-uHTMLBuilder
-read LICENSE.txt 
-version 1.2
-}
-
-
-unit uHTMLBuilder;
+﻿unit uHTMLBuilder;
 
 interface
 
